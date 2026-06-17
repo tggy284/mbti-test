@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI测试 - 60道专业测试题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">M</span>
+                </div>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">MBTI测试</span>
+            </a>
+            <div id="userNav" class="flex items-center space-x-4">
+                <!-- 动态渲染 -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="bg-white/50 sticky top-16 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-600">测试进度</span>
+                <span id="progressText" class="text-sm font-semibold text-indigo-600">1 / 60</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500" style="width: 1.67%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测试内容 -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-8">
+            <!-- 题目区域 -->
+            <div id="questionContainer">
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <span class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl flex items-center justify-center font-bold mr-4">
+                            <span id="questionNum">1</span>
+                        </span>
+                        <span class="text-sm text-gray-500">请选择最符合你的选项</span>
+                    </div>
+                    <h2 id="questionText" class="text-xl font-semibold text-gray-800 leading-relaxed"></h2>
+                </div>
+
+                <!-- 选项 -->
+                <div id="optionsContainer" class="space-y-4">
+                    <!-- 动态渲染选项 -->
+                </div>
+            </div>
+
+            <!-- 导航按钮 -->
+            <div class="flex justify-between mt-10 pt-6 border-t border-gray-100">
+                <button id="prevBtn" onclick="prevQuestion()" disabled
+                    class="px-6 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-100 text-gray-600 hover:bg-gray-200">
+                    ← 上一题
+                </button>
+                <button id="nextBtn" onclick="nextQuestion()" disabled
+                    class="px-6 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg hover:shadow-xl">
+                    下一题 →
+                </button>
+            </div>
+        </div>
+
+        <!-- 测试提示 -->
+        <div class="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
+            <h3 class="font-semibold text-amber-800 mb-2 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                测试须知
+            </h3>
+            <ul class="text-amber-700 text-sm space-y-1">
+                <li>• 答案没有对错之分，请根据你的真实想法选择</li>
+                <li>• 不需要过多思考，选择第一印象最符合的选项</li>
+                <li>• 请独立完成测试，不要受他人影响</li>
+                <li>• 完成所有题目后才能查看结果</li>
+            </ul>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 检查登录状态
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        let currentQuestion = 0;
+        let answers = new Array(60).fill(null);
+
+        // 60道MBTI测试题
+        const questions = [
+            // E/I 维度 (外向/内向)
+            { text: "当你要外出一整天，你会", options: ["A. 计划你要做什么和在什么时候做", "B. 说去就去"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "你认为自己是一个", options: ["A. 较为随兴所至的人", "B. 较为有条理的人"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "你通常", options: ["A. 与人容易混熟", "B. 比较沉静或矜持"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "你是否", options: ["A. 容易让人了解", "B. 难于让人了解"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "大多数人会说你是一个", options: ["A. 重视自我隐私的人", "B. 非常坦率开放的人"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "在一大群人当中，通常是", options: ["A. 你介绍大家认识", "B. 别人介绍你"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "你喜欢花很多的时间", options: ["A. 一个人独处", "B. 和别人在一起"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "与很多人一起会", options: ["A. 令你活力倍增", "B. 常常令你心力憔悴"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "在社交聚会中，你", options: ["A. 有时感到郁闷", "B. 常常乐在其中"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "你通常", options: ["A. 和别人容易混熟", "B. 趋向自处一隅"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "你认为别人一般", options: ["A. 要花很长时间才认识你", "B. 用很短的时间便认识你"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "A注重隐私 B坦率开放", options: ["A. 注重隐私", "B. 坦率开放"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "A热衷 B文静", options: ["A. 热衷", "B. 文静"], dimension: "EI", aType: "E", bType: "I" },
+            { text: "A文静 B外向", options: ["A. 文静", "B. 外向"], dimension: "EI", aType: "I", bType: "E" },
+            { text: "A矜持 B健谈", options: ["A. 矜持", "B. 健谈"], dimension: "EI", aType: "I", bType: "E" },
+            
+            // S/N 维度 (实感/直觉)
+            { text: "假如你是一位老师，你会选教", options: ["A. 以事实为主的课程", "B. 涉及理论的课程"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "一般来说，你和哪些人比较合得来？", options: ["A. 富于想象力的人", "B. 现实的人"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "你宁愿被人认为是一个", options: ["A. 实事求是的人", "B. 机灵的人"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "你会跟哪些人做朋友？", options: ["A. 常提出新主意的", "B. 脚踏实地的"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "哪些人会更吸引你？", options: ["A. 一个思想敏捷及非常聪颖的人", "B. 实事求是，具丰富常识的人"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A抽象 B具体", options: ["A. 抽象", "B. 具体"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A事实 B意念", options: ["A. 事实", "B. 意念"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "A理论 B肯定", options: ["A. 理论", "B. 肯定"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A声明 B概念", options: ["A. 声明", "B. 概念"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "A意念 B实况", options: ["A. 意念", "B. 实况"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A富想象的 B以事论事", options: ["A. 富想象的", "B. 以事论事"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A建造 B发明", options: ["A. 建造", "B. 发明"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "A理论 B事实", options: ["A. 理论", "B. 事实"], dimension: "SN", aType: "N", bType: "S" },
+            { text: "A合情合理 B令人着迷", options: ["A. 合情合理", "B. 令人着迷"], dimension: "SN", aType: "S", bType: "N" },
+            { text: "要做许多人也做的事，你比较喜欢", options: ["A. 按照一般认可的方法去做", "B. 构想一个自己的想法"], dimension: "SN", aType: "S", bType: "N" },
+            
+            // T/F 维度 (思考/情感)
+            { text: "你是否经常让", options: ["A. 你的情感支配你的理智", "B. 你的理智主宰你的情感"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "你倾向", options: ["A. 重视感情多于逻辑", "B. 重视逻辑多于感情"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A温柔 B坚定", options: ["A. 温柔", "B. 坚定"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A思考 B感受", options: ["A. 思考", "B. 感受"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "A敏感 B公正", options: ["A. 敏感", "B. 公正"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A令人信服 B感人的", options: ["A. 令人信服", "B. 感人的"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "A同情怜悯 B远见", options: ["A. 同情怜悯", "B. 远见"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A利益 B祝福", options: ["A. 利益", "B. 祝福"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "A亲切的 B客观的", options: ["A. 亲切的", "B. 客观的"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A客观的 B热情的", options: ["A. 客观的", "B. 热情的"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "A富同情 B合逻辑", options: ["A. 富同情", "B. 合逻辑"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "A具分析力 B多愁善感", options: ["A. 具分析力", "B. 多愁善感"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "哪个是较高的赞誉，或称许为？", options: ["A. 一贯感性的人", "B. 一贯理性的人"], dimension: "TF", aType: "F", bType: "T" },
+            { text: "哪个是较高的赞誉，或称许为", options: ["A. 能干的", "B. 富有同情心"], dimension: "TF", aType: "T", bType: "F" },
+            { text: "你宁愿替哪一类上司（或者老师）工作？", options: ["A. 天性淳良，但常常前后不一的", "B. 言词尖锐但永远合乎逻辑的"], dimension: "TF", aType: "F", bType: "T" },
+            
+            // J/P 维度 (判断/感知)
+            { text: "处理许多事情上，你会喜欢", options: ["A. 凭兴所至行事", "B. 按照计划行事"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "按照程序表做事", options: ["A. 合你心意", "B. 令你感到束缚"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "当你有一份特别的任务，你会喜欢", options: ["A. 开始前小心组织计划", "B. 边做边找须做什么"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "在大多数情况下，你会选择", options: ["A. 顺其自然", "B. 按程序表做事"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "你比较喜欢", options: ["A. 坐观事情发展才作计划", "B. 很早就作计划"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "你比较喜欢", options: ["A. 很早便把约会、社交聚集等事情安排妥当", "B. 无拘无束，看当时有什么好玩就做什么"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "计划一个旅程时，你较喜欢", options: ["A. 大部分的时间都是跟当天的感觉行事", "B. 事先知道大部分的日子会做什么"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "在日常工作中，你会", options: ["A. 颇为喜欢处理迫使你分秒必争的突发事件", "B. 通常预先计划，以免要在压力下工作"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "A预先安排的 B无计划的", options: ["A. 预先安排的", "B. 无计划的"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "A冲动 B决定", options: ["A. 冲动", "B. 决定"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "A有系统 B随意", options: ["A. 有系统", "B. 随意"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "A不受约束 B预先安排", options: ["A. 不受约束", "B. 预先安排"], dimension: "JP", aType: "P", bType: "J" },
+            { text: "A有条不紊 B不拘小节", options: ["A. 有条不紊", "B. 不拘小节"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "A有系统 B即兴", options: ["A. 有系统", "B. 即兴"], dimension: "JP", aType: "J", bType: "P" },
+            { text: "当你要在一个星期内完成一个大项目，你在开始的时候会", options: ["A. 把要做的不同工作依次列出", "B. 马上动工"], dimension: "JP", aType: "J", bType: "P" }
+        ];
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionNum').textContent = currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('progressText').textContent = `${currentQuestion + 1} / 60`;
+            document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / 60) * 100}%`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const isSelected = answers[currentQuestion] === index;
+                const btn = document.createElement('button');
+                btn.className = `w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 ${
+                    isSelected 
+                        ? 'border-indigo-500 bg-indigo-50 shadow-md' 
+                        : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                }`;
+                btn.innerHTML = `<span class="font-semibold ${isSelected ? 'text-indigo-600' : 'text-gray-700'}">${option}</span>`;
+                btn.onclick = () => selectOption(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = answers[currentQuestion] === null;
+            
+            if (currentQuestion === 59 && answers[currentQuestion] !== null) {
+                document.getElementById('nextBtn').textContent = '查看结果 →';
+                document.getElementById('nextBtn').onclick = submitTest;
+            } else {
+                document.getElementById('nextBtn').textContent = '下一题 →';
+                document.getElementById('nextBtn').onclick = nextQuestion;
+            }
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < 59 && answers[currentQuestion] !== null) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function submitTest() {
+            // 计算MBTI结果
+            const result = calculateMBTI(questions, answers);
+            saveTestResult(currentUser.username, result);
+            window.location.href = `result.html?type=${result.type}`;
+        }
+
+        // 初始化
+        renderQuestion();
+        updateUserNav();
+    </script>
+</body>
+</html>

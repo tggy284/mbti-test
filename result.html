@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试结果 - MBTI人格测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">M</span>
+                </div>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">MBTI测试</span>
+            </a>
+            <div id="userNav" class="flex items-center space-x-4">
+                <!-- 动态渲染 -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- 结果内容 -->
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <!-- 结果卡片 -->
+        <div id="resultCard" class="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden">
+            <!-- 头部 -->
+            <div id="resultHeader" class="p-8 text-center text-white">
+                <div class="text-sm uppercase tracking-widest mb-2 opacity-80">你的人格类型是</div>
+                <div id="resultType" class="text-6xl font-bold mb-4"></div>
+                <div id="resultName" class="text-2xl font-medium"></div>
+            </div>
+
+            <!-- 维度分数 -->
+            <div class="p-8 border-b border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">四个维度分析</h3>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium text-gray-700">外向 (E) - 内向 (I)</span>
+                            <span id="eiScore" class="text-indigo-600 font-semibold"></span>
+                        </div>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="eiBar" class="h-full bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-1000"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium text-gray-700">实感 (S) - 直觉 (N)</span>
+                            <span id="snScore" class="text-indigo-600 font-semibold"></span>
+                        </div>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="snBar" class="h-full bg-gradient-to-r from-green-400 to-teal-500 rounded-full transition-all duration-1000"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium text-gray-700">思考 (T) - 情感 (F)</span>
+                            <span id="tfScore" class="text-indigo-600 font-semibold"></span>
+                        </div>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="tfBar" class="h-full bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full transition-all duration-1000"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium text-gray-700">判断 (J) - 感知 (P)</span>
+                            <span id="jpScore" class="text-indigo-600 font-semibold"></span>
+                        </div>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="jpBar" class="h-full bg-gradient-to-r from-purple-400 to-pink-500 rounded-full transition-all duration-1000"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 详细描述 -->
+            <div class="p-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">性格特点</h3>
+                <div id="resultDesc" class="text-gray-600 leading-relaxed space-y-4"></div>
+            </div>
+
+            <!-- 职业建议 -->
+            <div class="p-8 bg-gray-50">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">适合的职业领域</h3>
+                <div id="resultCareers" class="flex flex-wrap gap-2"></div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="window.location.href='test.html'" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                重新测试
+            </button>
+            <button onclick="window.location.href='index.html'" class="px-8 py-4 bg-white text-indigo-600 rounded-2xl font-semibold shadow-md hover:shadow-lg border border-indigo-100 transition-all duration-300">
+                返回首页
+            </button>
+            <button onclick="shareResult()" class="px-8 py-4 bg-white text-gray-600 rounded-2xl font-semibold shadow-md hover:shadow-lg border border-gray-200 transition-all duration-300">
+                分享结果
+            </button>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        // MBTI 16型人格详细数据
+        const mbtiData = {
+            'INTJ': { name: '建筑师', color: 'from-emerald-500 to-teal-600', desc: ['INTJ是富有想象力和战略性的思想家，对一切都有计划。他们以独立和分析性思维著称，善于将复杂的概念转化为可行的计划。', '作为天生的策略家，INTJ具有独特的能力看到大局并预测未来趋势。他们追求知识和自我提升，对自己和他人都有很高的标准。', 'INTJ通常是安静而果断的，他们相信自己的远见卓识，不轻易受他人影响。'], careers: ['科学家', '系统分析师', '投资分析师', '战略规划师', '项目经理', '软件架构师'] },
+            'INTP': { name: '逻辑学家', color: 'from-blue-500 to-cyan-600', desc: ['INTP是创新的发明家，对知识有着永不满足的渴望。他们是天生的思考者，热衷于理论和抽象概念。', 'INTP以其卓越的逻辑分析能力著称，他们能够发现问题的本质，提出创新的解决方案。他们喜欢独立工作，享受智力挑战。', 'INTP通常开放、灵活，对新想法持欢迎态度，但在核心原则上非常坚定。'], careers: ['程序员', '数学家', '哲学家', '研究员', '数据分析师', '系统设计师'] },
+            'ENTJ': { name: '指挥官', color: 'from-violet-500 to-purple-600', desc: ['ENTJ是大胆、富有想象力且意志坚强的领导者，总能找到或创造解决问题的方法。他们天生具有领导才能。', 'ENTJ以其决断力和战略眼光著称，他们善于组织资源，激励团队达成目标。他们追求效率和结果，不畏惧挑战。', 'ENTJ通常是自信而直接的沟通者，他们能够看清大局，制定长期计划。'], careers: ['企业高管', '创业者', '管理顾问', '律师', '政治家', '投资银行家'] },
+            'ENTP': { name: '辩论家', color: 'from-sky-500 to-blue-600', desc: ['ENTP是聪明好奇的思想家，无法抗拒智力挑战。他们天生喜欢辩论，善于从多角度看问题。', 'ENTP以其敏捷的思维和口才著称，他们能够快速适应变化，发现新的可能性。他们喜欢创新，讨厌墨守成规。', 'ENTP通常是热情而有魅力的，他们能够激发他人的思考，推动变革。'], careers: ['企业家', '律师', '创意总监', '销售经理', '记者', '产品经理'] },
+            'INFJ': { name: '提倡者', color: 'from-teal-500 to-emerald-600', desc: ['INFJ是安静而神秘的人，但非常鼓舞人心，不知疲倦的理想主义者。他们具有深刻的洞察力。', 'INFJ以其强烈的直觉和同理心著称，他们能够理解他人的深层需求，致力于帮助他人成长。他们追求意义和目的。', 'INFJ通常是有远见的，他们相信自己的价值观，致力于创造更美好的世界。'], careers: ['心理咨询师', '作家', '教师', '人力资源', '社会工作者', '非营利组织领导'] },
+            'INFP': { name: '调停者', color: 'from-cyan-500 to-teal-600', desc: ['INFP是诗意、善良的利他主义者，总是热切地为正义事业提供帮助。他们是真正的理想主义者。', 'INFP以其深厚的价值观和同理心著称，他们追求真实和意义，忠于自己的内心。他们富有创造力和想象力。', 'INFP通常是安静而体贴的，他们关心他人的感受，努力创造和谐的环境。'], careers: ['作家', '艺术家', '心理咨询师', '教师', '社工', '人力资源专家'] },
+            'ENFJ': { name: '主人公', color: 'from-fuchsia-500 to-pink-600', desc: ['ENFJ是富有魅力和鼓舞人心的领导者，能够吸引他们的听众。他们天生具有帮助他人的热情。', 'ENFJ以其出色的沟通能力和同理心著称，他们能够激励他人发挥潜能，建立和谐的团队。他们追求共同成长。', 'ENFJ通常是热情而有魅力的，他们善于组织和领导，致力于帮助他人成功。'], careers: ['教师', '人力资源经理', '销售经理', '公关专家', '心理咨询师', '政治家'] },
+            'ENFP': { name: '竞选者', color: 'from-rose-500 to-red-500', desc: ['ENFP是热情、有创造力和社交能力的自由精神者，总能找到微笑的理由。他们充满活力和好奇心。', 'ENFP以其热情和创造力著称，他们善于与人建立联系，发现新的可能性。他们追求自由和多样性。', 'ENFP通常是乐观而有魅力的，他们能够激励他人，带来积极的能量。'], careers: ['记者', '演员', '咨询师', '营销专家', '教师', '创业者'] },
+            'ISTJ': { name: '物流师', color: 'from-amber-500 to-yellow-600', desc: ['ISTJ是实际和注重事实的人，其可靠性无可置疑。他们是可靠的组织者和执行者。', 'ISTJ以其责任感和细致著称，他们注重细节，遵循规则，确保事情按计划进行。他们追求稳定和秩序。', 'ISTJ通常是安静而认真的，他们信守承诺，是团队中值得信赖的成员。'], careers: ['会计师', '审计师', '行政经理', '银行职员', '警察', '军人'] },
+            'ISFJ': { name: '守卫者', color: 'from-orange-500 to-amber-600', desc: ['ISFJ是非常专注和温暖的保护者，总是准备好保护所爱的人。他们是可靠的照顾者。', 'ISFJ以其耐心和奉献著称，他们关注他人的需求，默默地提供支持。他们重视传统和稳定。', 'ISFJ通常是谦虚而体贴的，他们记得重要的细节，关心他人的福祉。'], careers: ['护士', '教师', '社工', '行政助理', '客服', '图书管理员'] },
+            'ESTJ': { name: '总经理', color: 'from-lime-500 to-green-600', desc: ['ESTJ是出色的管理者，在管理事情或人方面无与伦比。他们是天生的组织者。', 'ESTJ以其决断力和组织能力著称，他们善于建立秩序，确保高效运行。他们重视传统和规则。', 'ESTJ通常是直接而务实的，他们喜欢明确的结构，追求实际的结果。'], careers: ['经理', '军官', '法官', '金融分析师', '销售经理', '学校管理员'] },
+            'ESFJ': { name: '执政官', color: 'from-green-500 to-emerald-600', desc: ['ESFJ是极有爱心、社交和受欢迎的人，总是热心帮助他人。他们是天生的照顾者。', 'ESFJ以其热情和合作精神著称，他们善于与人相处，创造和谐的氛围。他们重视社区和传统。', 'ESFJ通常是友好而体贴的，他们关心他人，努力让每个人都感到被重视。'], careers: ['护士', '教师', '销售代表', '社工', '活动策划', '客户服务'] },
+            'ISTP': { name: '鉴赏家', color: 'from-red-500 to-rose-600', desc: ['ISTP是大胆而实际的实验者，精通各种工具。他们是冷静的问题解决者。', 'ISTP以其动手能力和适应性著称，他们善于分析问题，找到实用的解决方案。他们追求自由和自主。', 'ISTP通常是安静而观察敏锐的，他们在危机中保持冷静，能够快速反应。'], careers: ['工程师', '机械师', '飞行员', '法医', '运动员', '程序员'] },
+            'ISFP': { name: '探险家', color: 'from-yellow-500 to-amber-600', desc: ['ISFP是灵活有魅力的艺术家，随时准备探索和体验新事物。他们是天生的审美者。', 'ISFP以其敏感和审美感著称，他们热爱美和自然，追求真实的体验。他们温和而友善。', 'ISFP通常是安静而热情的，他们用行动表达自己，享受当下的美好。'], careers: ['艺术家', '设计师', '音乐家', '摄影师', '厨师', '理疗师'] },
+            'ESTP': { name: '企业家', color: 'from-stone-500 to-gray-600', desc: ['ESTP是聪明、精力充沛、非常有洞察力的人，真正喜欢活在边缘。他们是天生的行动者。', 'ESTP以其活力和务实著称，他们善于抓住机会，快速做出决策。他们喜欢冒险和刺激。', 'ESTP通常是外向而直接的，他们擅长谈判，能够在压力下表现出色。'], careers: ['企业家', '销售', '运动员', '股票交易员', '警察', '消防员'] },
+            'ESFP': { name: '表演者', color: 'from-slate-500 to-zinc-600', desc: ['ESFP是自发的、精力充沛的艺人，生活在他们周围永不乏味。他们是天生的娱乐者。', 'ESFP以其热情和乐观著称，他们热爱社交，享受成为关注的焦点。他们活在当下，追求快乐。', 'ESFP通常是友好而活泼的，他们能够带动气氛，让每个人都参与其中。'], careers: ['演员', '销售', '活动策划', '旅游顾问', '健身教练', '公关'] }
+        };
+
+        function getUrlParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        function displayResult() {
+            const type = getUrlParam('type') || 'INFP';
+            const data = mbtiData[type];
+            
+            if (!data) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('resultType').textContent = type;
+            document.getElementById('resultName').textContent = data.name;
+            document.getElementById('resultHeader').className = `p-8 text-center text-white bg-gradient-to-r ${data.color}`;
+            
+            // 显示描述
+            const descContainer = document.getElementById('resultDesc');
+            descContainer.innerHTML = data.desc.map(p => `<p>${p}</p>`).join('');
+            
+            // 显示职业
+            const careersContainer = document.getElementById('resultCareers');
+            careersContainer.innerHTML = data.careers.map(career => 
+                `<span class="px-4 py-2 bg-white rounded-full text-gray-700 shadow-sm border border-gray-100">${career}</span>`
+            ).join('');
+
+            // 获取用户测试结果
+            const results = getTestResults(currentUser?.username);
+            if (results && results.length > 0) {
+                const lastResult = results[results.length - 1];
+                updateDimensionBars(lastResult.scores);
+            }
+        }
+
+        function updateDimensionBars(scores) {
+            // E-I
+            const eiPercent = scores.E / (scores.E + scores.I) * 100;
+            document.getElementById('eiBar').style.width = `${eiPercent}%`;
+            document.getElementById('eiScore').textContent = `E:${scores.E} / I:${scores.I}`;
+            
+            // S-N
+            const snPercent = scores.S / (scores.S + scores.N) * 100;
+            document.getElementById('snBar').style.width = `${snPercent}%`;
+            document.getElementById('snScore').textContent = `S:${scores.S} / N:${scores.N}`;
+            
+            // T-F
+            const tfPercent = scores.T / (scores.T + scores.F) * 100;
+            document.getElementById('tfBar').style.width = `${tfPercent}%`;
+            document.getElementById('tfScore').textContent = `T:${scores.T} / F:${scores.F}`;
+            
+            // J-P
+            const jpPercent = scores.J / (scores.J + scores.P) * 100;
+            document.getElementById('jpBar').style.width = `${jpPercent}%`;
+            document.getElementById('jpScore').textContent = `J:${scores.J} / P:${scores.P}`;
+        }
+
+        function shareResult() {
+            const type = getUrlParam('type') || 'INFP';
+            const text = `我在MBTI测试中测出是${type}型人格！快来测测你的人格类型吧~`;
+            if (navigator.share) {
+                navigator.share({ title: '我的MBTI测试结果', text: text });
+            } else {
+                alert('分享功能：' + text);
+            }
+        }
+
+        // 初始化
+        displayResult();
+        updateUserNav();
+    </script>
+</body>
+</html>

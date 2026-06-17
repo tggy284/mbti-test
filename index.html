@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI人格测试 - 探索真实的自己</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">M</span>
+                </div>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">MBTI测试</span>
+            </div>
+            <div id="userNav" class="flex items-center space-x-4">
+                <!-- 动态渲染 -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Hero区域 -->
+        <section class="text-center mb-16">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                发现你的人格类型
+            </h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                通过60道专业MBTI测试题，深入了解你的性格特质，探索真实的自己，发现潜在的职业优势与人际关系模式
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="startTest()" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                    开始测试 →
+                </button>
+                <button onclick="showTypes()" class="px-8 py-4 bg-white text-indigo-600 rounded-2xl font-semibold text-lg shadow-md hover:shadow-lg border border-indigo-100 transition-all duration-300">
+                    了解16型人格
+                </button>
+            </div>
+        </section>
+
+        <!-- 特点介绍 -->
+        <section class="grid md:grid-cols-3 gap-8 mb-16">
+            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-14 h-14 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">专业权威</h3>
+                <p class="text-gray-600">基于经典MBTI理论体系，60道标准化测试题，确保测试结果的准确性和参考价值</p>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-14 h-14 bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">即时结果</h3>
+                <p class="text-gray-600">完成测试后立即获得详细的人格类型分析报告，包含性格特点、职业建议和发展方向</p>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-14 h-14 bg-gradient-to-r from-pink-400 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">永久保存</h3>
+                <p class="text-gray-600">注册账号后可永久保存测试记录，随时查看历史结果，追踪自我认知的成长历程</p>
+            </div>
+        </section>
+
+        <!-- 16型人格预览 -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">16种人格类型</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="type-card bg-emerald-50 border-2 border-emerald-200 rounded-xl p-4 text-center hover:border-emerald-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-emerald-600">INTJ</div>
+                    <div class="text-sm text-gray-600">建筑师</div>
+                </div>
+                <div class="type-card bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-center hover:border-blue-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-blue-600">INTP</div>
+                    <div class="text-sm text-gray-600">逻辑学家</div>
+                </div>
+                <div class="type-card bg-violet-50 border-2 border-violet-200 rounded-xl p-4 text-center hover:border-violet-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-violet-600">ENTJ</div>
+                    <div class="text-sm text-gray-600">指挥官</div>
+                </div>
+                <div class="type-card bg-sky-50 border-2 border-sky-200 rounded-xl p-4 text-center hover:border-sky-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-sky-600">ENTP</div>
+                    <div class="text-sm text-gray-600">辩论家</div>
+                </div>
+                <div class="type-card bg-teal-50 border-2 border-teal-200 rounded-xl p-4 text-center hover:border-teal-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-teal-600">INFJ</div>
+                    <div class="text-sm text-gray-600">提倡者</div>
+                </div>
+                <div class="type-card bg-cyan-50 border-2 border-cyan-200 rounded-xl p-4 text-center hover:border-cyan-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-cyan-600">INFP</div>
+                    <div class="text-sm text-gray-600">调停者</div>
+                </div>
+                <div class="type-card bg-fuchsia-50 border-2 border-fuchsia-200 rounded-xl p-4 text-center hover:border-fuchsia-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-fuchsia-600">ENFJ</div>
+                    <div class="text-sm text-gray-600">主人公</div>
+                </div>
+                <div class="type-card bg-rose-50 border-2 border-rose-200 rounded-xl p-4 text-center hover:border-rose-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-rose-600">ENFP</div>
+                    <div class="text-sm text-gray-600">竞选者</div>
+                </div>
+                <div class="type-card bg-amber-50 border-2 border-amber-200 rounded-xl p-4 text-center hover:border-amber-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-amber-600">ISTJ</div>
+                    <div class="text-sm text-gray-600">物流师</div>
+                </div>
+                <div class="type-card bg-orange-50 border-2 border-orange-200 rounded-xl p-4 text-center hover:border-orange-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-orange-600">ISFJ</div>
+                    <div class="text-sm text-gray-600">守卫者</div>
+                </div>
+                <div class="type-card bg-lime-50 border-2 border-lime-200 rounded-xl p-4 text-center hover:border-lime-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-lime-600">ESTJ</div>
+                    <div class="text-sm text-gray-600">总经理</div>
+                </div>
+                <div class="type-card bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center hover:border-green-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-green-600">ESFJ</div>
+                    <div class="text-sm text-gray-600">执政官</div>
+                </div>
+                <div class="type-card bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center hover:border-red-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-red-600">ISTP</div>
+                    <div class="text-sm text-gray-600">鉴赏家</div>
+                </div>
+                <div class="type-card bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 text-center hover:border-yellow-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-yellow-600">ISFP</div>
+                    <div class="text-sm text-gray-600">探险家</div>
+                </div>
+                <div class="type-card bg-stone-50 border-2 border-stone-200 rounded-xl p-4 text-center hover:border-stone-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-stone-600">ESTP</div>
+                    <div class="text-sm text-gray-600">企业家</div>
+                </div>
+                <div class="type-card bg-slate-50 border-2 border-slate-200 rounded-xl p-4 text-center hover:border-slate-400 transition-all cursor-pointer">
+                    <div class="text-2xl font-bold text-slate-600">ESFP</div>
+                    <div class="text-sm text-gray-600">表演者</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 测试统计 -->
+        <section class="bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl text-center">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="text-4xl font-bold text-indigo-600">60</div>
+                    <div class="text-gray-600">专业测试题</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-purple-600">16</div>
+                    <div class="text-gray-600">人格类型</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-pink-600">4</div>
+                    <div class="text-gray-600">核心维度</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-blue-600">100%</div>
+                    <div class="text-gray-600">免费测试</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white/50 backdrop-blur-sm mt-16 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
+            <p>© 2024 MBTI人格测试 | 基于经典 Myers-Briggs 理论体系</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        function startTest() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            window.location.href = 'test.html';
+        }
+        
+        function showTypes() {
+            alert('16型人格详细介绍即将上线！');
+        }
+    </script>
+</body>
+</html>
