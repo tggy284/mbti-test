@@ -1,0 +1,82 @@
+/* 自定义样式 */
+* {
+    font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* 平滑滚动 */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 自定义动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* 选项悬停效果 */
+.option-btn {
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    transform: translateX(8px);
+}
+
+/* 渐变文字 */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 卡片阴影 */
+.card-shadow {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* 按钮点击效果 */
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* 进度条动画 */
+.progress-animate {
+    transition: width 0.5s ease-out;
+}
+
+/* 类型卡片悬停 */
+.type-card:hover {
+    transform: translateY(-4px);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
